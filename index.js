@@ -12,9 +12,12 @@ const productRoute = require("./routes/product")
 const cartRoute = require("./routes/cart")
 const orderRoute = require("./routes/order")
 const paymentRoute = require("./routes/payment")
-var cors = require("cors")
+const cors = require("cors")
 
-app.use(cors())
+app.use(cors({
+    origin:'http://localhost:3000',
+    credentials:true
+}))
 app.use(express.json())
 
 mongoose
@@ -24,8 +27,9 @@ mongoose
         console.log("error :", err)
     })
 
-app.get("/api/test", () => {
+app.get("/api/test", (req,res) => {
     console.log("test is successfull")
+    res.send("Welcome to our Ecommerce API")
 })
 
 app.use("/api/users", userRoute)
@@ -35,6 +39,7 @@ app.use("/api/orders", orderRoute)
 app.use("/api/carts", cartRoute)
 app.use("/api/payments", paymentRoute)
 
-app.listen(3002, () => {
+app.listen(3002, (req,res) => {
     console.log("server running")
+    //res.status(200).send("Welcome to our Ecommerce-API")
 })

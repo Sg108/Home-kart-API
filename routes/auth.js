@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken")
 
 //REGISTER
 router.post("/register", async (req, res) => {
+    console.log(req.body)
     const newUser = new User({
         username: req.body.username,
         email: req.body.email,
@@ -26,11 +27,15 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
     try {
+        console.log(req.body)
         const user = await User.findOne({
-            userName: req.body.user_name,
+            username: req.body.username,
         })
 
-        !user && res.status(401).json("Wrong User Name")
+        if(!user)
+        {
+            console.log("Wrong User Name")
+            return res.status(401).json("Wrong User Name")}
 
         const hashedPassword = CryptoJS.AES.decrypt(
             user.password,
@@ -41,8 +46,11 @@ router.post("/login", async (req, res) => {
 
         const inputPassword = req.body.password
 
-        originalPassword != inputPassword &&
-            res.status(401).json("Wrong Password")
+        if(originalPassword != inputPassword)
+        { 
+            console.log("Wrong password")
+        return res.status(401).json("Wrong Password")
+        }
 
         const accessToken = jwt.sign(
             {
@@ -50,14 +58,38 @@ router.post("/login", async (req, res) => {
                 isAdmin: user.isAdmin,
             },
             process.env.JWT_SEC,
-            { expiresIn: "3d" }
+            { expiresIn: "1d" }
         )
-
+        console.log(accessToken)
         const { password, ...others } = user._doc
+        //console.log(password)
+       
+      
+        res.setHeader('Set-Cookie','jwt='+accessToken+';HttpOnly')
+
         res.status(200).json({ ...others, accessToken })
+        
     } catch (err) {
         res.status(500).json(err)
     }
 })
+router.post("/logout", (req, res) => {
+    //req.logout();
+    //console.log(req)
+   //console.log(req)
+   //res.header('Access-Control-Allow-Origin':"*")
+//    res.setHeader("Access-Control-Allow-Origin", "*");
+//    res.setHeader("Access-Control-Allow-Credentials", "true");
+// res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+// res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+    //.redirect("http://localhost:3000/");
+    let token=req.headers.cookie
+    token=token.slice(4,token.length)
+    //const expiresDate = new Date(new Date().getTime() + 1000); 
+    console.log(token)
+    res.setHeader('Set-Cookie','jwt=0;Max-Age=1;HttpOnly')
+    //res.redirect('http://localhost:3000')
+    res.send("logged out")
+  });
 
 module.exports = router
