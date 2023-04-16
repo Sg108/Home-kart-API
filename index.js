@@ -15,7 +15,7 @@ const paymentRoute = require("./routes/payment")
 const cors = require("cors")
 
 app.use(cors({
-    origin:'*',
+    origin:'https://deft-klepon-a3dbc4.netlify.app',
     credentials:true
 }))
 app.use(express.json())
