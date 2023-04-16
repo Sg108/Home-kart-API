@@ -29,7 +29,7 @@ mongoose
 
 app.get("/api/test", (req,res) => {
     console.log("test is successfull")
-    res.send("Welcome to our Ecommerce API")
+    res.send("<center><h1>Welcome to our Ecommerce API</h1></center>")
 })
 
 app.use("/api/users", userRoute)
@@ -39,7 +39,9 @@ app.use("/api/orders", orderRoute)
 app.use("/api/carts", cartRoute)
 app.use("/api/payments", paymentRoute)
 
-app.listen(3002, (req,res) => {
-    console.log("server running")
-    //res.status(200).send("Welcome to our Ecommerce-API")
+app.listen(process.env.PORT||3002, (req,res) => {
+    console.log("server running");
+   
+    
+    
 })
