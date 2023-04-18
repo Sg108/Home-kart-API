@@ -14,6 +14,7 @@ const orderRoute = require("./routes/order")
 const paymentRoute = require("./routes/payment")
 const cors = require("cors")
 
+
 app.use(cors({
     origin:'https://homekart.azurewebsites.net',
     credentials:true
