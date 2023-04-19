@@ -14,8 +14,9 @@ const orderRoute = require("./routes/order")
 const paymentRoute = require("./routes/payment")
 const cors = require("cors")
 
+
 app.use(cors({
-    origin:'https://deft-klepon-a3dbc4.netlify.app',
+    origin:'https://homekart.azurewebsites.net',
     credentials:true
 }))
 app.use(express.json())
