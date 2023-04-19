@@ -39,7 +39,7 @@ app.use("/api/orders", orderRoute)
 app.use("/api/carts", cartRoute)
 app.use("/api/payments", paymentRoute)
 
-app.listen(process.env.PORT||3002, (req,res) => {
+app.listen(process.env.PORT||3000, (req,res) => {
     console.log("server running");
    
     
