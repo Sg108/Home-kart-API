@@ -65,7 +65,7 @@ router.post("/login", async (req, res) => {
         //console.log(password)
        
       
-        res.setHeader('Set-Cookie','jwt='+accessToken+";HttpOnly")
+        res.setHeader('Set-Cookie','jwt='+accessToken+";HttpOnly;path=/")
 
         res.status(200).json({ ...others, accessToken })
         
@@ -84,12 +84,14 @@ router.post("/logout", (req, res) => {
 // res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
     //.redirect("http://localhost:3000/");
     let token=req.headers.cookie
+    console.log(req.headers)
     token=token.slice(4,token.length)
     //const expiresDate = new Date(new Date().getTime() + 1000); 
-    
-    res.setHeader('Set-Cookie','jwt=0;Max-Age=1;HttpOnly')
+    console.log("log out",token)
+    res.setHeader('Set-Cookie','jwt=0;Max-Age=1;HttpOnly;path=/')
     //res.redirect('http://localhost:3000')
     res.send("logged out")
   });
+  
 
 module.exports = router

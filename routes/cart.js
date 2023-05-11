@@ -7,26 +7,36 @@ const {
     verifyTokenAndAdmin,
 } = require("./verifyToken")
 
-router.post("/", verifyTokenAndAdmin, async (req, res) => {
-    const newCart = new Cart(req.body)
-    try {
-        const savedCart = await newCart.save()
-        res.status(200).json(savedCart)
-    } catch (err) {
-        res.status(500).json(err)
-    }
-})
+// router.post("/", async (req, res) => {
+//     const newCart = new Cart(req.body)
+//     try {
+//         const savedCart = await newCart.save()
+//         res.status(200).json(savedCart)
+//     } catch (err) {
+//         res.status(500).json(err)
+//     }
+// })
 
 // update
-router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
+router.post("/:id",verifyTokenAndAuthorization,async (req, res) => {
     try {
-        const updatedCart = await Cart.findByIdAndUpdate(
-            req.params.id,
+         //console.log("add")
+         updatedCart = await Cart.findOneAndUpdate(
             {
-                $set: req.body,
+            userId:req.params.id},
+            {
+                $push: { products:req.body.products},
             },
             { new: true }
         )
+        if(!updatedCart)
+        {
+            
+            const newCart = new Cart({userId:req.params.id,products:req.body.products})
+            updatedCart=await newCart.save()
+           // res.status(200).json(updatedCart)
+        }
+        console.log(updatedCart._id.toString())
         res.status(200).json(updatedCart)
     } catch (err) {
         res.status(500).json(err)
@@ -35,10 +45,24 @@ router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
 
 // // delete user
 
-router.delete("/:id", verifyTokenAndAuthorization, async (req, res) => {
+router.delete("/:id/:itemId",verifyTokenAndAuthorization, async (req, res) => {
     try {
-        await Cart.findByIdAndDelete(req.params.id)
-        res.status(200).json("Cart has been deleted successfully!")
+        let Singlecart = await Cart.findOne({userId:req.params.id})
+        let updatedproducts = Singlecart.products.filter((obj)=>{
+              return  obj.itemId!==req.params.itemId
+        })
+        console.log("SingleCart: ",Singlecart)
+        console.log(updatedproducts)
+        await Cart.findOneAndUpdate(
+            {
+                userId:req.params.id},
+                {
+                    $set: { products:updatedproducts},
+                },
+                { new: true }
+        )
+    
+        res.status(200).json("Cart item has been deleted successfully!")
     } catch (err) {
         res.status(500).send(err)
     }
@@ -47,7 +71,10 @@ router.delete("/:id", verifyTokenAndAuthorization, async (req, res) => {
 // get User Cart
 router.get("/:id", verifyTokenAndAuthorization, async (req, res) => {
     try {
+        //console.log("p")
         const cart = await Cart.findOne({ userId: req.params.id })
+        //console.log(cart)
+
         res.status(200).json(cart)
     } catch (err) {
         res.status(500).send(err)
@@ -56,6 +83,7 @@ router.get("/:id", verifyTokenAndAuthorization, async (req, res) => {
 
 router.get("/", verifyTokenAndAdmin, async (req, res) => {
     try {
+       
         const carts = await Cart.find()
         res.status(200).json(carts)
     } catch (err) {
