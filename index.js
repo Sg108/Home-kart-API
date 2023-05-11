@@ -16,7 +16,7 @@ const cors = require("cors")
 
 
 app.use(cors({
-    origin:'http://localhost:3001',
+    origin:'https://homekart.azurewebsites.net',
     credentials:true
 }))
 app.use(express.json())
