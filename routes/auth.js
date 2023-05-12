@@ -65,7 +65,7 @@ router.post("/login", async (req, res) => {
         //console.log(password)
        
       
-        res.setHeader('Set-Cookie','jwt='+accessToken+";path=/")
+        res.setHeader('Set-Cookie','jwt='+accessToken+";path=/;SameSite=None;Secure")
 
         res.status(200).json({ ...others, accessToken })
         
@@ -88,7 +88,7 @@ router.post("/logout", (req, res) => {
     token=token.slice(4,token.length)
     //const expiresDate = new Date(new Date().getTime() + 1000); 
     console.log("log out",token)
-    res.setHeader('Set-Cookie','jwt=0;Max-Age=1;path=/')
+    res.setHeader('Set-Cookie','jwt=0;Max-Age=1;path=/;SameSite=None;Secure')
     //res.redirect('http://localhost:3000')
     res.send("logged out")
   });
