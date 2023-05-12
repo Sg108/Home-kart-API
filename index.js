@@ -14,13 +14,20 @@ const orderRoute = require("./routes/order")
 const paymentRoute = require("./routes/payment")
 const cors = require("cors")
 
-
+app.set('trust proxy', 1);
 app.use(cors({
     origin:'https://homekart.azurewebsites.net',
     credentials:true
 }))
 app.use(express.json())
 
+
+app.use(function(req, res, next) {
+  if(req.headers['x-arr-ssl'] && !req.headers['x-forwarded-proto']) {
+    req.headers['x-forwarded-proto'] = 'https';
+  }
+  return next();
+});
 mongoose
     .connect(process.env.MONGO_URL)
     .then(() => console.log("Database Connected"))
