@@ -17,8 +17,13 @@ const cors = require("cors")
 app.set('trust proxy', 1);
 app.use(cors({
     origin:'https://home-kart.vercel.app',
-    credentials:true
+    credentials:true,
+  
 }))
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+  });
 app.use(express.json())
 
 
