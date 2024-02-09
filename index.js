@@ -39,6 +39,10 @@ app.get("/api/test", (req,res) => {
     console.log("test is successfull")
     res.send("<center><h1>Welcome to our Ecommerce API</h1></center>")
 })
+app.get("/", (req,res) => {
+    console.log("test is successfull")
+    res.send("<center><h1>Welcome to our Ecommerce API</h1></center>")
+})
 
 app.use("/api/users", userRoute)
 app.use("/api/users/auth/", authRoute)
