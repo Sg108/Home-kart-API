@@ -16,7 +16,7 @@ const cors = require("cors")
 
 app.set('trust proxy', 1);
 app.use(cors({
-    origin:'https://home-kart-api.vercel.app',
+    origin:'https://home-kart.vercel.app',
     credentials:true
 }))
 app.use(express.json())
