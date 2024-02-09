@@ -54,3 +54,5 @@ app.listen(process.env.PORT||3000, (req,res) => {
     
 })
 
+
+module.exports = app
