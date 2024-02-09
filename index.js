@@ -16,7 +16,7 @@ const cors = require("cors")
 
 app.set('trust proxy', 1);
 app.use(cors({
-    origin:'https://homekart.azurewebsites.net',
+    origin:'https://home-kart-api.vercel.app',
     credentials:true
 }))
 app.use(express.json())
